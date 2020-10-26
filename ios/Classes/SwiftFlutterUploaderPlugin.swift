@@ -278,11 +278,11 @@ public class SwiftFlutterUploaderPlugin: NSObject, FlutterPlugin, URLSessionTask
                                                        completion completionHandler:@escaping (URLSessionUploadTask?, FlutterError?) -> Void) {
         let request = NSMutableURLRequest(url: url)
         request.httpMethod = method
-        request.addValue("*/*", forHTTPHeaderField: "Accept")
+        request.setValue("*/*", forHTTPHeaderField: "Accept")
 
         headers?.forEach { (key, value) in
             if let v = value as? String {
-                request.addValue(v, forHTTPHeaderField: key)
+                request.setValue(v, forHTTPHeaderField: key)
             }
         }
 
@@ -407,14 +407,14 @@ public class SwiftFlutterUploaderPlugin: NSObject, FlutterPlugin, URLSessionTask
 
         let request = NSMutableURLRequest(url: url)
         request.httpMethod = method
-        request.addValue("*/*", forHTTPHeaderField: "Accept")
-        request.addValue("\(contentType)", forHTTPHeaderField: "Content-Type")
-        request.addValue("\(contentLength)", forHTTPHeaderField: "Content-Length")
+        request.setValue("*/*", forHTTPHeaderField: "Accept")
+        request.setValue("\(contentType)", forHTTPHeaderField: "Content-Type")
+        request.setValue("\(contentLength)", forHTTPHeaderField: "Content-Length")
 
         if headers != nil {
             headers!.forEach { (key, value) in
                 if let v = value as? String {
-                    request.addValue(v, forHTTPHeaderField: key)
+                    request.setValue(v, forHTTPHeaderField: key)
                 }
             }
         }

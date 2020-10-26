@@ -181,7 +181,7 @@ public class UploadWorker extends Worker implements CountProgressListener {
           String header = headers.get(key);
 
           if (header != null && !header.isEmpty()) {
-            requestBuilder = requestBuilder.addHeader(key, header);
+            requestBuilder = requestBuilder.header(key, header);
           }
         }
       }
@@ -195,8 +195,8 @@ public class UploadWorker extends Worker implements CountProgressListener {
                 "url is not a valid url",
                 null));
       }
-
-      requestBuilder.addHeader("Accept", "application/json; charset=utf-8");
+      
+      requestBuilder.addHeader("Accept", "*/*");
 
       Request request;
 
