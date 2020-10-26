@@ -138,7 +138,7 @@ public class UploadWorker extends Worker implements CountProgressListener {
         }
 
         String mimeType = GetMimeType(item.getPath());
-        MediaType contentType = MediaType.parse(mimeType);
+        MediaType contentType = MediaType.parse("application/octostream");
         innerRequestBody = RequestBody.create(file, contentType);
       } else {
         MultipartBody.Builder formRequestBuilder = prepareRequest(parameters, null);
@@ -174,6 +174,8 @@ public class UploadWorker extends Worker implements CountProgressListener {
       RequestBody requestBody = new CountingRequestBody(innerRequestBody, getId().toString(), this);
       Request.Builder requestBuilder = new Request.Builder();
 
+      requestBuilder.addHeader("Accept", "*/*");
+
       if (headers != null) {
 
         for (String key : headers.keySet()) {
@@ -196,13 +198,14 @@ public class UploadWorker extends Worker implements CountProgressListener {
                 null));
       }
       
-      requestBuilder.addHeader("Accept", "*/*");
+
 
       Request request;
 
       switch (method.toUpperCase()) {
         case "PUT":
           request = requestBuilder.url(url).put(requestBody).build();
+         
           break;
         case "PATCH":
           request = requestBuilder.url(url).patch(requestBody).build();
@@ -210,7 +213,7 @@ public class UploadWorker extends Worker implements CountProgressListener {
           break;
         default:
           request = requestBuilder.url(url).post(requestBody).build();
-
+       
           break;
       }
 
@@ -225,6 +228,7 @@ public class UploadWorker extends Worker implements CountProgressListener {
               .readTimeout((long) timeout, TimeUnit.SECONDS)
               .build();
 
+      // System.out.println();
       call = client.newCall(request);
       Response response = call.execute();
       String responseString = response.body().string();
@@ -319,9 +323,15 @@ public class UploadWorker extends Worker implements CountProgressListener {
   private String GetMimeType(String url) {
     String type = "*/*";
     String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+    System.out.println(url + "angeldebug2");
     try {
       if (extension != null && !extension.isEmpty()) {
-        type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
+        String mimeType =
+        MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
+    if (mimeType != null && !mimeType.isEmpty()) {
+      type = mimeType;
+      System.out.println(type + "angeldebug2");
+    }
       }
     } catch (Exception ex) {
       Log.d(TAG, "UploadWorker - GetMimeType", ex);
