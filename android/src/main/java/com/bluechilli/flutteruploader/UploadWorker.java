@@ -138,7 +138,7 @@ public class UploadWorker extends Worker implements CountProgressListener {
         }
 
         String mimeType = GetMimeType(item.getPath());
-        MediaType contentType = MediaType.parse("application/octostream");
+        MediaType contentType = MediaType.parse(mimeTyoe);
         innerRequestBody = RequestBody.create(file, contentType);
       } else {
         MultipartBody.Builder formRequestBuilder = prepareRequest(parameters, null);
